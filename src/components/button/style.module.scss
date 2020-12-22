@@ -1,0 +1,61 @@
+@import "src/basic";
+
+$offset: 1em;
+
+@mixin paint-element($fillColor) {
+	display: inline-grid;
+	grid-auto-flow: column;
+	column-gap: $offset;
+	align-items: center;
+	background-color: $fillColor;
+	border: none;
+	border-radius: $borderRadius;
+	@if $fillColor == $lightGrey {
+		color: $darkGrey;
+		box-shadow: 0 0 5px -2px $darkGrey;
+	} @else {
+		color: $lightGrey;
+	}
+	font-family: inherit;
+	outline: none;
+	transition: 0.2s;
+
+	&:hover {
+		cursor: pointer;
+		box-shadow: 0 0 15px -2px $darkblue;
+	}
+
+	&:focus-visible {
+		box-shadow: 0 0 15px -2px $darkblue;
+	}
+
+	svg {
+		@if $fillColor == $lightGrey {
+			fill: $darkGrey;
+		} @else {
+			fill: $lightGrey;
+		}
+	}
+}
+
+.medium {
+	height: 32px;
+	padding: 0 $offset;
+
+	svg {
+		width: 18px
+	}
+}
+
+.little {
+	height: 24px;
+	padding: 0 $offset/2;
+	font-size: 0.9em;
+
+	svg {
+		width: 10px
+	}
+}
+
+.blue {@include paint-element($darkblue)}
+.default {@include paint-element($lightGrey)}

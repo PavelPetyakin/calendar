@@ -1,0 +1,45 @@
+@import "src/basic";
+
+.container {
+	display: inline-grid;
+	grid-auto-flow: column;
+	column-gap: 10px;
+	align-items: center;
+
+	.input {
+		width: 220px;
+		height: 32px;
+		padding: 0 0.7em;
+		border: 1px solid $darkGrey;
+		border-radius: $borderRadius;
+		outline: none;
+		transition: 0.2s;
+
+		&:focus {
+			border-color: $darkblue;
+			box-shadow: 0 0 15px -4px $darkblue;
+		}
+	}
+
+	svg {
+		width: 18px;
+		height: 18px;
+		fill: $darkGrey;
+	}
+}
+
+.area {
+	width: 220px;
+	height: 120px;
+	padding: 0.7em;
+	border: 1px solid $darkGrey;
+	border-radius: $borderRadius;
+	resize: none;
+	outline: none;
+	transition: 0.2s;
+
+	&:focus {
+		border-color: $darkblue;
+		box-shadow: 0 0 15px -4px $darkblue;
+	}
+}

@@ -1,0 +1,18 @@
+.calendar {
+	height: 100vh;
+	overflow: hidden;
+
+	.header {
+		margin-bottom: 20px;
+	}
+
+	.navigation {
+		margin-bottom: 20px;
+		padding-left: 50px;
+	}
+
+	.schedule {
+		height: calc(100% - 163px);
+		margin: 0 50px 0 50px;
+	}
+}

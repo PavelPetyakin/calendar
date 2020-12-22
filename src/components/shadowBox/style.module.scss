@@ -1,0 +1,11 @@
+@import "src/basic";
+
+.container {
+	display: grid;
+	grid-row-gap: 1em;
+	position: relative;
+	z-index: 15;
+	padding: 1.5em;
+	border-radius: $borderRadius;
+	background-color: $lightGrey;
+}
