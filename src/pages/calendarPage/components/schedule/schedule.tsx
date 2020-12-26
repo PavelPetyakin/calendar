@@ -2,9 +2,9 @@ import React, { PropsWithChildren, useState } from "react";
 import cx from "classnames";
 import s from "./style.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { getDate, getEvents, getNotes } from "../../../../reducer/selectors";
+import { getEvents, getNotes } from "../../../../reducer/selectors";
 import { addEvent, addNote } from "../../../../reducer/actions";
-import { getCurrentMonthList, IMonthList } from "./utils";
+import { useGetCurrentMonthList, IMonthList, getToday } from "./utils";
 import { EventModal, Row } from "./components";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
@@ -26,13 +26,13 @@ const initialState: IActiveElement = {
 }
 
 export function Schedule(props: IPropsSchedule) {
-  const [activeElement, setActiveElement] = useState<IActiveElement>(initialState);
   const { className = "" } = props;
+  const [activeElement, setActiveElement] = useState<IActiveElement>(initialState);
   const dispatch = useDispatch();
-  const d: Date = useSelector(getDate);
   const events: string[] = useSelector(getEvents);
   const notes: INotes = useSelector(getNotes);
-  const currentMonthList = getCurrentMonthList(d);
+  const currentMonthList = useGetCurrentMonthList();
+  const today = getToday();
 
   const openModal = (id: IActiveElement) => setActiveElement(id);
   const closeModal = () => setActiveElement(initialState);
@@ -59,7 +59,16 @@ export function Schedule(props: IPropsSchedule) {
       <table>
         <tbody>
           {currentMonthList.map((week: IMonthList[], index: number) => {
-            return <Row key={index} week={week} activeId={activeElement.activeId} onClick={openModal} isFirstLine={index === 0} />
+            return (
+              <Row
+                key={index}
+                week={week}
+                today={today}
+                activeId={activeElement.activeId}
+                onClick={openModal}
+                isFirstLine={index === 0}
+              />
+            )
           })}
         </tbody>
       </table>

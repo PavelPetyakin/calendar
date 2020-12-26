@@ -4,6 +4,7 @@ td {
 	min-width: 140px;
 	max-width: 140px;
 	height: 140px;
+	max-height: 140px;
 	padding: 10px;
 	border: 1px solid $lightGrey;
 	overflow: hidden;
@@ -12,6 +13,20 @@ td {
 	&:focus {
 		outline: none;
 	}
+
+	h3 {
+		font-style: italic;
+		margin-top: 0;
+		margin-bottom: 10px;
+	}
+	& > div {
+		height: 90px;
+		overflow-y: auto;
+	}
+}
+
+.today {
+	background-color: $lightGrey;
 }
 
 td:focus-visible, td:hover, .active {

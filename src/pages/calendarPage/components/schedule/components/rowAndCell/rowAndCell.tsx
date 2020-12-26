@@ -4,7 +4,7 @@ import s from "./style.module.scss";
 import cx from "classnames";
 import { IActiveElement } from "../../schedule";
 
-interface IPropsRow extends Omit<IPropsCell, "day" | "title">{
+interface IPropsRow extends Omit<IPropsCell, "monthDay" | "title">{
   week: IMonthList[];
   isFirstLine: boolean;
 }
@@ -12,25 +12,26 @@ interface IPropsRow extends Omit<IPropsCell, "day" | "title">{
 const weekDay = ["Понедельник","Вторник","Среда","Четверг","Пятница","Суббота","Воскресенье"];
 
 export function Row(props: IPropsRow) {
-  const { week, activeId, onClick, isFirstLine } = props;
+  const { week, activeId, onClick, isFirstLine, today } = props;
 
-  const renderRow = week.map((day: IMonthList, i: number) => {
-    const title = isFirstLine ? `${weekDay[i]}, ${day.title}` : day.title;
-    return <Cell key={i} day={day} activeId={activeId} onClick={onClick} title={title} />
+  const renderRow = week.map((monthDay: IMonthList, i: number) => {
+    const title = isFirstLine ? `${weekDay[i]}, ${monthDay.title}` : monthDay.title;
+    return <Cell key={i} monthDay={monthDay} today={today} activeId={activeId} onClick={onClick} title={title} />
   })
 
   return <tr children={renderRow} />
 }
 
 interface IPropsCell {
-  day: IMonthList;
+  monthDay: IMonthList;
+  today: string;
   activeId: string | null;
   onClick: (e: IActiveElement) => void;
   title: string;
 }
 
 function Cell(props: IPropsCell) {
-  const { day, activeId, onClick, title } = props;
+  const { monthDay, activeId, onClick, title, today } = props;
   const [referenceElement, setReferenceElement] = useState<HTMLTableDataCellElement | null>(null);
 
   useEffect(() => {
@@ -40,31 +41,41 @@ function Cell(props: IPropsCell) {
     };
   });
 
-  const isActive = activeId === day.date;
+  const isActive = activeId === monthDay.date;
+  const isToday = today === monthDay.date;
+
   const handleClick = () => {
     onClick({
       ref: referenceElement,
-      activeId: day.date,
+      activeId: monthDay.date,
     })
   }
   const handleButton = (e: any) => {
     if (e.keyCode === 13) {
-      console.log("SomeText:");
       handleClick();
     }
+    if (e.keyCode === 27) {
+      onClick({
+        ref: null,
+        activeId: null,
+      })
+    }
   }
+
+  const renderEvents = monthDay.dayEvents?.map((item, index) => {
+    return <div key={index}>{`${item.title}, ${item.participants}`}</div>;
+  })
 
   return (
     <>
       <td
-        className={cx({[s.active]:isActive})}
+        className={cx({[s.active]:isActive, [s.today]:isToday})}
         onClick={handleClick}
         ref={setReferenceElement}
         tabIndex={7}
       >
-        <div>{title}</div>
-        {day.title === "12" && <div>ДР, Дима Молодцов!!</div>}
-        {day.title === "12" && <div>ДР, Иван Антонов!!</div>}
+        <h3>{title}</h3>
+        <div>{renderEvents}</div>
       </td>
     </>
   )

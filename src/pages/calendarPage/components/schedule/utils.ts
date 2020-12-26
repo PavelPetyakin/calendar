@@ -1,9 +1,17 @@
+import { IDayEvent, INotes } from "../../../../reducer/types";
+import { useSelector } from "react-redux";
+import { getDate, getNotes } from "../../../../reducer/selectors";
+
 export interface IMonthList {
   title: string;
   date: string;
+  dayEvents?: IDayEvent[];
 }
 
-export function getCurrentMonthList(d: Date): IMonthList[][] {
+export function useGetCurrentMonthList(): IMonthList[][] {
+  const d: Date = useSelector(getDate);
+  const notes: INotes = useSelector(getNotes);
+
   //Current month
   const currentYear = d.getFullYear();
   const currentMonth = d.getMonth();
@@ -34,6 +42,10 @@ export function getCurrentMonthList(d: Date): IMonthList[][] {
   const monthList: IMonthList[][] = [];
   let weekNumber = 0;
   list.forEach((day: IMonthList, index: number) => {
+    const dayNotes = notes[day.date];
+    if (dayNotes) {
+      day.dayEvents = dayNotes;
+    }
     if (index % 7 === 0) {
       monthList.push([]);
       if (index !== 0) {
@@ -55,4 +67,9 @@ function getDaysOfMonth(dayAmount: number, year: number, month: number, startDay
     });
   }
   return array;
+}
+
+export function getToday(): string {
+  const today: Date = new Date();
+  return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 }
