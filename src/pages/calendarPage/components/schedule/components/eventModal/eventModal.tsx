@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import s from "./style.module.scss";
-import { Button, Input, ShadowBox } from "../../../../../../components";
+import { Button, Input } from "../../../../../../components";
 import { Icon } from "../../../../../../svg";
 import { IDayEvent, INotes } from "../../../../../../reducer/types";
 
@@ -33,7 +33,7 @@ export function EventModal(props: IPropsEventModal) {
   };
 
   return (
-    <ShadowBox>
+    <div className={s.container}>
       <Icon.Cancel className={s.cancel} onClick={onClose} tabIndex={46}/>
       <Input value={note.title} onChange={handleChange("title")} placeholder={"Событие"} tabIndex={41}/>
       <Input type={"time"} value={note.time} onChange={handleChange("time")} placeholder={"Время"} tabIndex={41}/>
@@ -43,6 +43,6 @@ export function EventModal(props: IPropsEventModal) {
         <Button name="Готово" size="little" onClick={handleSave} tabIndex={44} />
         <Button name="Удалить" size="little" onClick={onRemove} tabIndex={45} />
       </div>
-    </ShadowBox>
+    </div>
   );
 }

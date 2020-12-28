@@ -3,9 +3,8 @@
 .container {
 	display: grid;
 	grid-row-gap: 1em;
-	position: relative;
-	z-index: 15;
-	padding: 1.5em;
+	//padding: 1.5em;
 	border-radius: $borderRadius;
-	background-color: $lightGrey;
+	background-color: white;
+	box-shadow: 0 2px 10px 0 $grey;
 }

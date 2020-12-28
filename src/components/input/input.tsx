@@ -1,4 +1,4 @@
-import React, { ReactElement, SyntheticEvent } from "react";
+import React, { ReactElement, SyntheticEvent, forwardRef, ForwardedRef } from "react";
 import s from "./style.module.scss";
 
 interface IInputProps {
@@ -11,7 +11,7 @@ interface IInputProps {
   type?: string;
 }
 
-export function Input(props: IInputProps) {
+export const Input = forwardRef((props: IInputProps, ref: ForwardedRef<HTMLInputElement>) => {
   const { value, onChange, placeholder, icon, tabIndex = 0, multiline = false, type = "text" } = props;
   const handleChange = (event: SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.currentTarget.value);
 
@@ -32,8 +32,9 @@ export function Input(props: IInputProps) {
         onChange={handleChange}
         placeholder={placeholder}
         tabIndex={tabIndex}
+        ref={ref}
       />
     </label>
 
   return render;
-}
+})

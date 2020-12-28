@@ -12,28 +12,3 @@
 		font-weight: bold;
 	}
 }
-
-.arrow {
-	width: 20px;
-	height: 20px;
-
-	&:after {
-		content: " ";
-		transform: rotate(45deg);
-		position: absolute;
-		right: 10px;
-		width: 20px;
-		height: 20px;
-		background-color: $lightGrey;
-		z-index: 10;
-	}
-}
-
-.popper[data-popper-placement^="left-start"] > .arrow,
-.popper[data-popper-placement^="left"] > .arrow,
-.popper[data-popper-placement^="left-end"] > .arrow {
-
-	&:after {
-		left: 252px;
-	}
-}

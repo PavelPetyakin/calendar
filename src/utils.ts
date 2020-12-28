@@ -1,6 +1,7 @@
-import { IDayEvent, INotes } from "../../../../reducer/types";
+import { IDayEvent, INotes } from "./reducer/types";
 import { useSelector } from "react-redux";
-import { getDate, getNotes } from "../../../../reducer/selectors";
+import { getDate, getEvents, getNotes } from "./reducer/selectors";
+import { DependencyList, useEffect, useRef } from "react";
 
 export interface IMonthList {
   title: string;
@@ -73,3 +74,60 @@ export function getToday(): string {
   const today: Date = new Date();
   return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 }
+
+export interface ISearchEvents {
+  title: string;
+  date: string;
+}
+
+export function useSearchEvents(searchStr: string ): ISearchEvents[] {
+  const events: string[] = useSelector(getEvents);
+  const notes: INotes = useSelector(getNotes);
+  const reg = new RegExp(searchStr, "i");
+  const eventsFoundList: ISearchEvents[] = [];
+
+  if (searchStr.length > 2) {
+    events.forEach((eDate: string): void => {
+      notes[eDate].forEach((event: IDayEvent) => {
+        const t = Object.values(event);
+        if (t.some(str => reg.test(str))) {
+          eventsFoundList.push({
+            title: event.title,
+            date: eDate,
+          })
+        }
+      })
+    })
+  }
+
+  return eventsFoundList;
+}
+
+export const useOutsideClick = (fn: () => void, deps: DependencyList = []) => {
+  const parent = useRef(null);
+
+  useEffect(() => {
+    function click(e: any) {
+      let cur = e.target;
+      let isOutside = true;
+
+      while (cur !== document.body && cur !== null) {
+        if (cur === parent.current) {
+          isOutside = false;
+          break;
+        }
+
+        cur = cur.parentNode;
+      }
+
+      if (isOutside) {
+        fn();
+      }
+    }
+
+    document.addEventListener("click", click);
+    return () => document.removeEventListener("click", click);
+  }, deps);
+
+  return parent;
+};
