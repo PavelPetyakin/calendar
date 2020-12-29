@@ -11,10 +11,12 @@ interface IInputProps {
   multiline?: boolean;
   type?: string;
   className?: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export const Input = forwardRef((props: IInputProps, ref: ForwardedRef<HTMLInputElement>) => {
-  const { value, onChange, placeholder, icon, tabIndex = 0, multiline = false, type = "text", className = "" } = props;
+  const { value, onChange, placeholder, icon, tabIndex = 0, multiline = false, type = "text", className = "", onFocus, onBlur } = props;
   const handleChange = (event: SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.currentTarget.value);
 
   const render = multiline ?
@@ -35,6 +37,8 @@ export const Input = forwardRef((props: IInputProps, ref: ForwardedRef<HTMLInput
         placeholder={placeholder}
         tabIndex={tabIndex}
         ref={ref}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
     </label>
 

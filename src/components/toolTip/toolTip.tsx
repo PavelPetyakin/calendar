@@ -7,12 +7,14 @@ import { ShadowBox } from "../index";
 import { Icon } from "../../svg";
 
 interface IPropsTooltip {
+  isShow: boolean;
+  onClose?: () => void;
   targetRef: HTMLElement | null;
   placement?: PopperJS.Placement;
 }
 
 export function Tooltip(props: PropsWithChildren<IPropsTooltip>) {
-  const { targetRef, children, placement = "bottom" } = props;
+  const { targetRef, children, placement = "bottom", isShow, onClose } = props;
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
   const [arrowElement, setArrowElement] = useState<HTMLElement | null>(null);
   const padding: number = targetRef ? targetRef.clientWidth / 2 - 15 : 10;
@@ -23,25 +25,31 @@ export function Tooltip(props: PropsWithChildren<IPropsTooltip>) {
     ],
     placement
   });
-console.log("styles.arrow:", styles.arrow);
 
   return (
-    ReactDOM.createPortal(
-      <div
-        className={s.popper}
-        ref={setPopperElement}
-        style={styles.popper}
-        {...attributes.popper}
-      >
-        <div className={s.arrow} ref={setArrowElement} style={styles.arrow}>
-          <Icon.Triangle/>
-        </div>
-        <ShadowBox className={s.box} children={children}/>
-        <div className={s.arrow} ref={setArrowElement} style={styles.arrow}>
-          <Icon.Triangle/>
-        </div>
-      </div>,
-      document.body
-    )
+      <>
+        {isShow ?
+            ReactDOM.createPortal(
+                <div
+                    className={s.popper}
+                    ref={setPopperElement}
+                    style={styles.popper}
+                    {...attributes.popper}
+                >
+                  <div className={s.arrow} ref={setArrowElement} style={styles.arrow}>
+                    <Icon.Triangle/>
+                  </div>
+                  <ShadowBox className={s.box}>
+                    {onClose && <Icon.Cancel className={s.cancel} onClick={onClose} tabIndex={46}/>}
+                    {children}
+                  </ShadowBox>
+                  <div className={s.arrow} ref={setArrowElement} style={styles.arrow}>
+                    <Icon.Triangle/>
+                  </div>
+                </div>,
+                document.body
+            ) : null
+        }
+      </>
   )
 }

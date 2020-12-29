@@ -2,6 +2,8 @@ import { IDayEvent, INotes } from "./reducer/types";
 import { useSelector } from "react-redux";
 import { getDate, getEvents, getNotes } from "./reducer/selectors";
 import { DependencyList, useEffect, useRef } from "react";
+import { addEvent, addNote } from "./reducer/actions";
+import { Dispatch } from "redux";
 
 export interface IMonthList {
   title: string;
@@ -101,6 +103,23 @@ export function useSearchEvents(searchStr: string ): ISearchEvents[] {
   }
 
   return eventsFoundList;
+}
+
+export function addNoteToStore(newNote: INotes, events: string[], notes: INotes, dispatch: Dispatch) {
+  const [keyOfNotes, note]: [string, IDayEvent[]] = Object.entries(newNote)[0];
+
+  if (events.some(el => el === keyOfNotes)) {
+    const newNotes: INotes = {...notes};
+    const x: IDayEvent[] = [...newNotes[keyOfNotes], ...note];
+    const y: INotes = {...notes, [keyOfNotes]: x};
+    dispatch(addNote(y));
+  } else {
+    const newNotes = {...notes, [keyOfNotes]: note};
+    const newEvents = [...events];
+    newEvents.push(keyOfNotes);
+    dispatch(addEvent(newEvents));
+    dispatch(addNote(newNotes));
+  }
 }
 
 export const useOutsideClick = (fn: () => void, deps: DependencyList = []) => {

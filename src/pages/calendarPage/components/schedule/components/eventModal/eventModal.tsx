@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import s from "./style.module.scss";
 import { Button, Input } from "../../../../../../components";
-import { Icon } from "../../../../../../svg";
 import { IDayEvent, INotes } from "../../../../../../reducer/types";
 
 interface IPropsEventModal {
-  activeId: string;
+  activeId: string | null;
   onSave: (note: INotes) => void;
   onRemove: () => void;
-  onClose: () => void;
 }
 
 const initNote: IDayEvent = {
@@ -19,7 +17,7 @@ const initNote: IDayEvent = {
 }
 
 export function EventModal(props: IPropsEventModal) {
-  const { activeId, onSave, onRemove, onClose } = props;
+  const { activeId, onSave, onRemove } = props;
   const [note, setNote] = useState<IDayEvent>(initNote);
 
   const handleChange = (key: string) => (val: string) => {
@@ -28,13 +26,14 @@ export function EventModal(props: IPropsEventModal) {
   };
 
   const handleSave = () => {
-    const savedNote: INotes = {[activeId]: [note]};
-    onSave(savedNote);
+    if (activeId) {
+        const savedNote: INotes = {[activeId]: [note]};
+        onSave(savedNote);
+    }
   };
 
   return (
     <div className={s.container}>
-      <Icon.Cancel className={s.cancel} onClick={onClose} tabIndex={46}/>
       <Input value={note.title} onChange={handleChange("title")} placeholder={"Событие"} tabIndex={41}/>
       <Input type={"time"} value={note.time} onChange={handleChange("time")} placeholder={"Время"} tabIndex={41}/>
       <Input value={note.participants} onChange={handleChange("participants")} placeholder={"Имена участников"} tabIndex={42}/>
