@@ -1,5 +1,6 @@
 import React, { ReactElement, SyntheticEvent, forwardRef, ForwardedRef } from "react";
 import s from "./style.module.scss";
+import cx from "classnames";
 
 interface IInputProps {
   value: string;
@@ -9,15 +10,16 @@ interface IInputProps {
   tabIndex?: number;
   multiline?: boolean;
   type?: string;
+  className?: string;
 }
 
 export const Input = forwardRef((props: IInputProps, ref: ForwardedRef<HTMLInputElement>) => {
-  const { value, onChange, placeholder, icon, tabIndex = 0, multiline = false, type = "text" } = props;
+  const { value, onChange, placeholder, icon, tabIndex = 0, multiline = false, type = "text", className = "" } = props;
   const handleChange = (event: SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.currentTarget.value);
 
   const render = multiline ?
     <textarea
-      className={s.area}
+      className={cx(s.area, className)}
       value={value}
       onChange={handleChange}
       placeholder={placeholder}
@@ -26,7 +28,7 @@ export const Input = forwardRef((props: IInputProps, ref: ForwardedRef<HTMLInput
     <label className={s.container}>
       {icon}
       <input
-        className={s.input}
+        className={cx(s.input, className)}
         type={type}
         value={value}
         onChange={handleChange}

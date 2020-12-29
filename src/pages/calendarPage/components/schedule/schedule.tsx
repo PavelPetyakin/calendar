@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import cx from "classnames";
 import s from "./style.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { getDate, getEvents, getNotes } from "../../../../reducer/selectors";
+import { getEvents, getNotes } from "../../../../reducer/selectors";
 import { addEvent, addNote } from "../../../../reducer/actions";
 import { useGetCurrentMonthList, IMonthList, getToday } from "../../../../utils";
 import { EventModal, Row } from "./components";
@@ -27,7 +27,6 @@ export function Schedule(props: IPropsSchedule) {
   const {className = ""} = props;
   const [activeElement, setActiveElement] = useState<IActiveElement>(initialState);
   const dispatch = useDispatch();
-  const d: Date = useSelector(getDate);
   const events: string[] = useSelector(getEvents);
   const notes: INotes = useSelector(getNotes);
   const currentMonthList = useGetCurrentMonthList();

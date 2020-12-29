@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, forwardRef, ForwardedRef } from "react";
 import cx from "classnames";
 import s from "./style.module.scss";
 
@@ -24,7 +24,7 @@ interface IButton {
   tabIndex?: number;
 }
 
-export function Button(props: IButton) {
+export const Button = forwardRef((props: IButton, ref: ForwardedRef<HTMLButtonElement>) => {
   const {
     name,
     icon,
@@ -36,9 +36,9 @@ export function Button(props: IButton) {
   } = props;
 
   return (
-    <button className={cx(s[color], s[size], className)} onClick={onClick} tabIndex={tabIndex}>
+    <button className={cx(s[color], s[size], className)} onClick={onClick} ref={ref} tabIndex={tabIndex}>
       {icon}
       {name}
     </button>
   );
-}
+})
