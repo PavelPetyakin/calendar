@@ -8,7 +8,7 @@ import { AddEventModal, SearchModal } from "./components";
 import { useSearchEvents, ISearchEvents, addNoteToStore } from "../../../../utils";
 import { INotes} from "../../../../reducer/types";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents, getNotes } from "../../../../reducer/selectors";
+import {getBufferId, getEvents, getNotes} from "../../../../reducer/selectors";
 import { Dispatch } from "redux";
 
 interface IPropsHeader {
@@ -18,6 +18,7 @@ interface IPropsHeader {
 export function Header(props: IPropsHeader) {
   const { className = "" } = props;
   const dispatch: Dispatch = useDispatch();
+  const bufferId: number = useSelector(getBufferId);
   const events: string[] = useSelector(getEvents);
   const notes: INotes = useSelector(getNotes);
 
@@ -35,7 +36,7 @@ export function Header(props: IPropsHeader) {
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
 
-  const createNote = (newNote: INotes) => addNoteToStore(newNote, events, notes, dispatch);
+  const createNote = (newNote: INotes) => addNoteToStore(newNote, bufferId, events, notes, dispatch);
 
   return (
     <header className={cx(s.header, className)}>

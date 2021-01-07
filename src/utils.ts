@@ -2,7 +2,7 @@ import { IDayEvent, INotes } from "./reducer/types";
 import { useSelector } from "react-redux";
 import { getDate, getEvents, getNotes } from "./reducer/selectors";
 import { DependencyList, useEffect, useRef } from "react";
-import { addEvent, addNote } from "./reducer/actions";
+import { addEvent, changeNote, updateBufferId } from "./reducer/actions";
 import { Dispatch } from "redux";
 
 export interface IMonthList {
@@ -105,20 +105,37 @@ export function useSearchEvents(searchStr: string ): ISearchEvents[] {
   return eventsFoundList;
 }
 
-export function addNoteToStore(newNote: INotes, events: string[], notes: INotes, dispatch: Dispatch) {
+export function addNoteToStore(newNote: INotes, bufferId: number ,events: string[], notes: INotes, dispatch: Dispatch) {
   const [keyOfNotes, note]: [string, IDayEvent[]] = Object.entries(newNote)[0];
+  const nextId = bufferId + 1;
+  const [noteElem] = note;
 
-  if (events.some(el => el === keyOfNotes)) {
-    const newNotes: INotes = {...notes};
-    const x: IDayEvent[] = [...newNotes[keyOfNotes], ...note];
-    const y: INotes = {...notes, [keyOfNotes]: x};
-    dispatch(addNote(y));
+  if (noteElem.id === 0) {
+    noteElem.id = nextId;
+    if (events.some(el => el === keyOfNotes)) {
+      const newNotes: INotes = {...notes};
+      const notesOfDay: IDayEvent[] = [...newNotes[keyOfNotes], ...note];
+      const addingNote: INotes = {...notes, [keyOfNotes]: notesOfDay};
+      dispatch(changeNote(addingNote));
+      dispatch(updateBufferId(nextId));
+    } else {
+      const newNotes = {...notes, [keyOfNotes]: note};
+      const newEvents = [...events];
+      newEvents.push(keyOfNotes);
+      dispatch(addEvent(newEvents));
+      dispatch(changeNote(newNotes));
+      dispatch(updateBufferId(nextId));
+    }
   } else {
-    const newNotes = {...notes, [keyOfNotes]: note};
-    const newEvents = [...events];
-    newEvents.push(keyOfNotes);
-    dispatch(addEvent(newEvents));
-    dispatch(addNote(newNotes));
+    const newNotes: INotes = {...notes};
+    const notesOfDay = [...newNotes[keyOfNotes]];
+    newNotes[keyOfNotes].forEach((el, i) => {
+      if (el.id === noteElem.id) {
+        notesOfDay[i] = {...el, description: noteElem.description};
+      }
+    });
+    newNotes[keyOfNotes] = notesOfDay;
+    dispatch(changeNote(newNotes));
   }
 }
 

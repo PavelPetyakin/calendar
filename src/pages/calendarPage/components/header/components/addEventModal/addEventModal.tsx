@@ -11,7 +11,7 @@ export function AddEventModal(props: IPropsAddEventModal) {
   const { onSave } = props;
   const [value, setValue] = useState<string>("");
   const handleChange = (val: string) => setValue(val);
-  const handleSave = () => onSave(createEvent(value));
+  const handleSave = () => value && onSave(createEvent(value));
 
   return (
     <div className={s.container}>
@@ -47,7 +47,7 @@ function createEvent(str: string): INotes {
   return {
     [key]: [{
       title,
-      time: "00:00",
+      id: 0,
       participants: "",
       description: "",
     }]

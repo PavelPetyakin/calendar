@@ -1,73 +1,74 @@
 export const initialState: ICalendarState = {
+  bufferId: 10,
   date: new Date(),
-  events: ["2020-12-22", "2020-12-23", "2020-12-24", "2020-12-25", "2020-12-26"],
+  events: ["2021-1-22", "2021-1-23", "2021-1-24", "2021-1-25", "2021-1-26"],
   notes: {
-    "2020-12-22": [
+    "2021-1-22": [
       {
-        title: "event 1 event 1 1 event 1 1 event 1 1 event 1 1 event 1 1 event 1 1 event 1",
-        time: "12:00",
+        title: "event 1",
+        id: 1,
         participants: "participants 1",
         description: "description 1",
       },
       {
         title: "event 2",
-        time: "13:00",
+        id: 2,
         participants: "participants 2",
         description: "description 2",
       },
     ],
-    "2020-12-23": [
+    "2021-1-23": [
       {
         title: "event 1",
-        time: "12:00",
+        id: 3,
         participants: "participants 1",
         description: "description 1",
       },
       {
         title: "event 2",
-        time: "13:00",
+        id: 4,
         participants: "participants 2",
         description: "description 2",
       },
     ],
-    "2020-12-24": [
+    "2021-1-24": [
       {
         title: "event 1",
-        time: "12:00",
+        id: 5,
         participants: "participants 1",
         description: "description 1",
       },
       {
         title: "event 2",
-        time: "13:00",
+        id: 6,
         participants: "participants 2",
         description: "description 2",
       },
     ],
-    "2020-12-25": [
+    "2021-1-25": [
       {
         title: "event 1",
-        time: "12:00",
+        id: 7,
         participants: "participants 1",
         description: "description 1",
       },
       {
         title: "event 2",
-        time: "13:00",
+        id: 8,
         participants: "participants 2",
         description: "description 2",
       },
     ],
-    "2020-12-26": [
+    "2021-1-26": [
       {
         title: "event 1",
-        time: "12:00",
+        id: 9,
         participants: "participants 1",
         description: "description 1",
       },
       {
         title: "event 2",
-        time: "13:00",
+        id: 10,
         participants: "participants 2",
         description: "description 2",
       },
@@ -76,6 +77,7 @@ export const initialState: ICalendarState = {
 }
 
 export interface ICalendarState {
+  bufferId: number;
   date: Date;
   events: string[];
   notes: INotes;
@@ -87,7 +89,7 @@ export interface INotes {
 
 export interface IDayEvent {
   title: string;
-  time: string;
+  id: number;
   participants: string;
   description: string;
 }

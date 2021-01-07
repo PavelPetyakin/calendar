@@ -1,5 +1,5 @@
 import { IMonthList } from "../../../../../../utils";
-import React, { useEffect, useState } from "react";
+import React, {SyntheticEvent, useEffect, useState} from "react";
 import s from "./style.module.scss";
 import cx from "classnames";
 import { IActiveElement } from "../../schedule";
@@ -16,7 +16,16 @@ export function Row(props: IPropsRow) {
 
   const renderRow = week.map((monthDay: IMonthList, i: number) => {
     const title = isFirstLine ? `${weekDay[i]}, ${monthDay.title}` : monthDay.title;
-    return <Cell key={i} monthDay={monthDay} today={today} activeId={activeId} onClick={onClick} title={title} />
+    return (
+      <Cell
+        key={i}
+        monthDay={monthDay}
+        today={today}
+        activeId={activeId}
+        onClick={onClick}
+        title={title}
+      />
+    )
   })
 
   return <tr children={renderRow} />
@@ -62,8 +71,17 @@ function Cell(props: IPropsCell) {
     }
   }
 
+  const handleOnEvent = (id: number) => (e: SyntheticEvent) => {
+    e.stopPropagation();
+    onClick({
+      ref: referenceElement,
+      activeId: monthDay.date,
+      id,
+    });
+  }
+
   const renderEvents = monthDay.dayEvents?.map((item, index) => {
-    return <div key={index}>{`${item.title}, ${item.participants}`}</div>;
+    return <div onClick={handleOnEvent(item.id)} key={index}>{`${item.title}, ${item.participants}`}</div>;
   })
 
   return (
