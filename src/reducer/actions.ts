@@ -1,3 +1,3 @@
 import { actions } from "./reducer";
 
-export const { updateDate, addEvent, addNote } = actions;
+export const { updateBufferId, updateDate, addEvent, changeNote } = actions;

@@ -13,4 +13,4 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== "production",
 });
 
-store.subscribe(() => console.log(store.getState()));
+// store.subscribe(() => console.log(store.getState()));

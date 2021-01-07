@@ -1,26 +1,38 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import s from "./style.module.scss";
 import { Button, Input } from "../../../../../../components";
-import { Icon } from "../../../../../../svg";
 import { IDayEvent, INotes } from "../../../../../../reducer/types";
+import { IActiveElement } from "../../schedule";
 
-interface IPropsEventModal {
-  activeId: string;
+interface IPropsEventModal extends Omit<IActiveElement, "ref"> {
   onSave: (note: INotes) => void;
-  onRemove: () => void;
-  onClose: () => void;
+  onRemove: (activeId: string | null, id: number | undefined) => void;
+  notes: INotes;
 }
 
 const initNote: IDayEvent = {
   title: "",
-  time: "",
+  id: 0,
   participants: "",
   description: "",
 }
 
 export function EventModal(props: IPropsEventModal) {
-  const { activeId, onSave, onRemove, onClose } = props;
+  const { activeId, id, notes, onSave, onRemove } = props;
   const [note, setNote] = useState<IDayEvent>(initNote);
+
+  useEffect(() => {
+    if (activeId && notes[activeId]) {
+      const editNote: IDayEvent | undefined = notes[activeId].find(note => note.id === id);
+      if (editNote) {
+        setNote(editNote);
+      } else {
+        setNote(initNote);
+      }
+    } else {
+      setNote(initNote);
+    }
+  },[activeId, id, notes]);
 
   const handleChange = (key: string) => (val: string) => {
     const updatedNote: IDayEvent = { ...note, [key]: val };
@@ -28,20 +40,37 @@ export function EventModal(props: IPropsEventModal) {
   };
 
   const handleSave = () => {
-    const savedNote: INotes = {[activeId]: [note]};
-    onSave(savedNote);
+    if (activeId) {
+        const savedNote: INotes = {[activeId]: [note]};
+        onSave(savedNote);
+    }
   };
+
+  const handleRemove = () => onRemove(activeId, id);
+
+
+  if (id) {
+    return (
+      <div className={s.container}>
+        <div children={note.title} />
+        <div children={note.participants} />
+        <Input value={note.description} onChange={handleChange("description")} placeholder={"Описание"} tabIndex={43} multiline={true}/>
+        <div className={s.buttons}>
+          <Button name="Готово" size="little" onClick={handleSave} tabIndex={44} />
+          <Button name="Удалить" size="little" onClick={handleRemove} tabIndex={45} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={s.container}>
-      <Icon.Cancel className={s.cancel} onClick={onClose} tabIndex={46}/>
       <Input value={note.title} onChange={handleChange("title")} placeholder={"Событие"} tabIndex={41}/>
-      <Input type={"time"} value={note.time} onChange={handleChange("time")} placeholder={"Время"} tabIndex={41}/>
       <Input value={note.participants} onChange={handleChange("participants")} placeholder={"Имена участников"} tabIndex={42}/>
       <Input value={note.description} onChange={handleChange("description")} placeholder={"Описание"} tabIndex={43} multiline={true}/>
       <div className={s.buttons}>
         <Button name="Готово" size="little" onClick={handleSave} tabIndex={44} />
-        <Button name="Удалить" size="little" onClick={onRemove} tabIndex={45} />
+        <Button name="Удалить" size="little" onClick={handleRemove} tabIndex={45} />
       </div>
     </div>
   );
