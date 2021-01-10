@@ -139,6 +139,11 @@ export function addNoteToStore(newNote: INotes, bufferId: number ,events: string
   }
 }
 
+export function getDateDescription(d: string, months: string[]): string {
+  const date: Date = new Date(d);
+  return `${date.getDate()} ${months[date.getMonth()]}`;
+}
+
 export const useOutsideClick = (fn: () => void, deps: DependencyList = []) => {
   const parent = useRef(null);
 

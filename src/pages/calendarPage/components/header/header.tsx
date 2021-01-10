@@ -42,7 +42,9 @@ export function Header(props: IPropsHeader) {
     <header className={cx(s.header, className)}>
       <div className={s.buttons}>
         <Button name="Добавить" color="blue" onClick={handleOpenModal} tabIndex={1} ref={setButtonRef} />
-        <Button name="Обновить" color="blue" onClick={() => undefined} tabIndex={2} />
+        <a className={s.link} href="">
+          <Button name="Обновить" color="blue" onClick={() => undefined} tabIndex={2} />
+        </a>
       </div>
       <Input
         value={searchStr}

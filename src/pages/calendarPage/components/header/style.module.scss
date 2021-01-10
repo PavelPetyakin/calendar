@@ -13,5 +13,13 @@
 		display: inline-grid;
 		grid-auto-flow: column;
 		column-gap: 10px;
+
+		.link {
+			text-decoration: none;
+
+			&:focus {
+				outline: none;
+			}
+		}
 	}
 }

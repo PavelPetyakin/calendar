@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.module.scss";
-import { ISearchEvents } from "../../../../../../utils";
+import { ISearchEvents, getDateDescription } from "../../../../../../utils";
 
 interface IPropsEventModal {
   eventsFoundList: ISearchEvents[];
@@ -29,7 +29,7 @@ export function SearchModal(props: IPropsEventModal) {
       <li key={index}>
         <div>
           <h4>{el.title}</h4>
-          <p>{getDateDescription(el.date)}</p>
+          <p>{getDateDescription(el.date, months)}</p>
         </div>
       </li>
     )
@@ -40,9 +40,4 @@ export function SearchModal(props: IPropsEventModal) {
       {renderList}
     </ul>
   );
-}
-
-function getDateDescription(d: string): string {
-  const date: Date = new Date(d);
-  return `${date.getDate()} ${months[date.getMonth()]}`;
 }

@@ -1,5 +1,5 @@
 import PopperJS from "@popperjs/core";
-import React, { PropsWithChildren, useState } from "react";
+import React, {PropsWithChildren, useEffect, useState} from "react";
 import { usePopper } from "react-popper";
 import ReactDOM from "react-dom";
 import s from "./style.module.scss";
@@ -26,6 +26,21 @@ export function Tooltip(props: PropsWithChildren<IPropsTooltip>) {
     placement
   });
 
+  const [refCancel, setRefCancel] = useState<any>(null);
+
+  useEffect(() => {
+    refCancel?.addEventListener("keydown", f);
+    return function cleanup() {
+      refCancel?.removeEventListener("keydown", f);
+    };
+  });
+
+  const f = (e: any) => {
+    if (onClose && e.keyCode === 13) {
+      onClose();
+    }
+  };
+
   return (
       <>
         {isShow ?
@@ -40,7 +55,7 @@ export function Tooltip(props: PropsWithChildren<IPropsTooltip>) {
                     <Icon.Triangle/>
                   </div>
                   <ShadowBox className={s.box}>
-                    {onClose && <Icon.Cancel className={s.cancel} onClick={onClose} tabIndex={46}/>}
+                    {onClose && <Icon.Cancel ref={setRefCancel} className={s.cancel} onClick={onClose} tabIndex={46}/>}
                     {children}
                   </ShadowBox>
                   <div className={s.arrow} ref={setArrowElement} style={styles.arrow}>
