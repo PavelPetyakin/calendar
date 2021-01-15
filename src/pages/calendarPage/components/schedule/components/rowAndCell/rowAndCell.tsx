@@ -82,7 +82,7 @@ function Cell(props: IPropsCell) {
 
   const renderEvents = monthDay.dayEvents?.map((item, index) => {
     const str: string = item.title ? `${item.title}, ${item.participants}` : item.participants;
-    return <div onClick={handleOnEvent(item.id)} key={index}>{str}</div>;
+    return <div className={s.event} onClick={handleOnEvent(item.id)} key={index}>{str}</div>;
   })
 
   return (
